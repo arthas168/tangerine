@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "220506313009",
+    "project_id": "tangerine-d6e2f",
+    "storage_bucket": "tangerine-d6e2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220506313009:android:843d4b36187cfd179fe010",
+        "android_client_info": {
+          "package_name": "com.example.tangerine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "220506313009-ic3polc2rcime40t31klfr27h216ain5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBit7hRoUbDCH4O-qrNxrGcQ20fnM4_70g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "220506313009-ic3polc2rcime40t31klfr27h216ain5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "220506313009-9o8dmsa4kk0mduk9u59il0tl1e0plp36.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tangerine"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
