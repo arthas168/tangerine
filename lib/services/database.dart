@@ -20,4 +20,8 @@ class DatabaseService {
           for (DocumentSnapshot ds in value.docs) {ds.reference.delete()}
         });
   }
+
+  Future<void> deleteOneEvent(String id) async {
+    await FirebaseFirestore.instance.collection("Event").doc(id).delete();
+  }
 }

@@ -125,6 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Map<String, String> eventMap = {
         "name": name,
         "date": dateToString,
+        "createdAt": DateTime.now().toString(),
+        "referenceId": randomAlphaNumeric(10)
       };
 
       await databaseService
@@ -202,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Text("Date: " +
                         (dateToString == ""
                             ? "no date chosen"
-                            : formatDateString(dateToString))),
+                            : formatDateTimeString(dateToString))),
                   ),
                   SizedBox(height: 10),
                   FlatButton(
