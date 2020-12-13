@@ -25,6 +25,8 @@ dependencies:
   cloud_firestore: ^0.14.4
   flutter_datetime_picker: ^1.4.0
   random_string: ^2.1.0
+  flutter_phoenix: ^0.1.0
+  fluttertoast: ^7.1.5
   flutter:
     sdk: flutter
 

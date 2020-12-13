@@ -1,11 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
 import 'package:tangerine/services/database.dart';
+import 'package:tangerine/userMenu.dart';
+
+import 'helpers/formatter.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    Phoenix(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,29 +40,116 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<void> _showNoDateError() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('No date chosen'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Please provide a date and time for the event.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showConfirmationDialogue() async {
+
+    if (dateToString == "") {
+      _showNoDateError();
+      return;
+    }
+
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text("Name: " + name),
+                SizedBox(
+                  height: 10,
+                ),
+                Text("Date: " + formatDateString(dateToString))
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'BACK',
+                style: TextStyle(color: Colors.black87),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'SUBMIT',
+                style: TextStyle(color: Colors.blue),
+              ),
+              onPressed: () {
+                uploadEventData();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   DatabaseService databaseService = new DatabaseService();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
 
   String name = "";
   String dateToString = "";
 
-  uploadEventData() {
-    setState(() {
-      _isLoading = true;
-    });
+  uploadEventData() async {
+    if (_formKey.currentState.validate()) {
 
-    Map<String, String> eventMap = {
-      "name": name,
-      "date": dateToString,
-    };
+      Map<String, String> eventMap = {
+        "name": name,
+        "date": dateToString,
+      };
 
-    databaseService
-        .addEventData(eventMap, randomAlphaNumeric(10))
-        .then((val) {})
-        .catchError((e) {
-      print(e);
-    });
+      await databaseService
+          .addEventData(eventMap, randomAlphaNumeric(10))
+          .then((val) {
+        print("RESET");
+        Phoenix.rebirth(context);
+        Fluttertoast.showToast(
+            msg: "Event added!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 3,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+      }).catchError((e) {
+        print(e);
+      });
+    }
   }
 
   @override
@@ -67,6 +163,9 @@ class _MyHomePageState extends State<MyHomePage> {
           return Scaffold(
             appBar: AppBar(
               title: Text(widget.title),
+              actions: [
+                UserMenuActions(),
+              ],
             ),
             body: Center(
               child: Column(
@@ -101,21 +200,29 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 30),
+                  Container(
+                    child: Text("Date: " +
+                        (dateToString == ""
+                            ? "no date chosen"
+                            : formatDateString(dateToString))),
+                  ),
+                  SizedBox(height: 10),
                   FlatButton(
                       onPressed: () {
-                        DatePicker.showDatePicker(context,
+                        DatePicker.showDateTimePicker(context,
                             showTitleActions: true,
                             minTime: DateTime(2020, 1, 1),
                             maxTime: DateTime(2021, 12, 31), onChanged: (date) {
                           print('change $date');
                         }, onConfirm: (date) {
-                          dateToString = date.toString();
-                          dateToString = date.toString();
+                          setState(() {
+                            dateToString = date.toString();
+                          });
                         }, currentTime: DateTime.now(), locale: LocaleType.en);
                       },
                       child: Text(
-                        'Add date',
+                        'Pick date and time',
                         style: TextStyle(color: Colors.deepOrange),
                       )),
                 ],
@@ -123,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                uploadEventData();
+                _showConfirmationDialogue();
               },
               tooltip: 'Add event',
               child: Icon(Icons.check),
