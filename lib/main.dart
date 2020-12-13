@@ -70,12 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _showConfirmationDialogue() async {
 
-    if (dateToString == "") {
-      _showNoDateError();
-      return;
-    }
-
-
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -126,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String dateToString = "";
 
   uploadEventData() async {
-    if (_formKey.currentState.validate()) {
+   
 
       Map<String, String> eventMap = {
         "name": name,
@@ -150,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }).catchError((e) {
         print(e);
       });
-    }
+    
   }
 
   @override
@@ -233,7 +227,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
+                  if (dateToString == "") {
+                    _showNoDateError();
+                  return;
+                  }
+
+                   if (_formKey.currentState.validate()) {
                 _showConfirmationDialogue();
+                   }
               },
               tooltip: 'Add event',
               child: Icon(Icons.check),
