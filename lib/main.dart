@@ -4,6 +4,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:random_string/random_string.dart';
+import 'package:tangerine/helpers/my_flutter_app_icons.dart';
 import 'package:tangerine/services/database.dart';
 import 'package:tangerine/userMenu.dart';
 
@@ -171,6 +172,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Icon(MyFlutterApp.tangerine__1_, size: 42, color: Colors.deepOrange),
+                  SizedBox(height: 15,),
                   Form(
                     key: _formKey,
                     child: Container(
