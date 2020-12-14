@@ -83,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 SizedBox(
                   height: 10,
                 ),
-                Text("Date: " + formatDateString(dateToString))
+                Text("Date: " + formatDateTimeString(dateToString))
               ],
             ),
           ),
