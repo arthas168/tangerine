@@ -125,6 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
       Map<String, String> eventMap = {
         "name": name,
         "date": dateToString,
+        "dateWithoutTime": dateToString.substring(0,10),
+        "time": dateToString.substring(11, 16),
         "createdAt": DateTime.now().toString(),
         "referenceId": randomAlphaNumeric(10)
       };
