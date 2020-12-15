@@ -177,6 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       width: 250,
                       child: TextFormField(
+                        textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
                           if (value.length == 0) {
                             return "Please enter name.";
